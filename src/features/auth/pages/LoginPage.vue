@@ -9,8 +9,17 @@ import Swal from 'sweetalert2'
 const router = useRouter()
 const authStore = useAuthStore()
 
-const [email, handleEmailChange] = useInput('')
-const [password, handlePasswordChange] = useInput('')
+const emailInput = useInput('')
+const passwordInput = useInput('')
+
+const email = Array.isArray(emailInput) ? emailInput[0] : (emailInput.value !== undefined && typeof emailInput.handleValueChange === 'function' ? emailInput.value : emailInput)
+const handleEmailChange = Array.isArray(emailInput) ? emailInput[1] : (emailInput.handleValueChange || emailInput.onChange || ((e: any) => { if (typeof email === 'object' && 'value' in email) email.value = e.target.value }))
+
+const password = Array.isArray(passwordInput) ? passwordInput[0] : (passwordInput.value !== undefined && typeof passwordInput.handleValueChange === 'function' ? passwordInput.value : passwordInput)
+const handlePasswordChange = Array.isArray(passwordInput) ? passwordInput[1] : (passwordInput.handleValueChange || passwordInput.onChange || ((e: any) => { if (typeof password === 'object' && 'value' in password) password.value = e.target.value }))
+
+const emailVal = () => (typeof email === 'object' && email !== null && 'value' in email ? email.value : email)
+const passwordVal = () => (typeof password === 'object' && password !== null && 'value' in password ? password.value : password)
 
 const emailError = ref('')
 const passwordError = ref('')
@@ -20,18 +29,21 @@ const validate = () => {
   emailError.value = ''
   passwordError.value = ''
 
-  if (!email.value) {
+  const ev = emailVal()
+  const pv = passwordVal()
+
+  if (!ev) {
     emailError.value = 'Email wajib diisi'
     isValid = false
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ev)) {
     emailError.value = 'Format email tidak valid'
     isValid = false
   }
 
-  if (!password.value) {
+  if (!pv) {
     passwordError.value = 'Password wajib diisi'
     isValid = false
-  } else if (password.value.length < 6) {
+  } else if (pv.length < 6) {
     passwordError.value = 'Password minimal 6 karakter'
     isValid = false
   }
@@ -45,8 +57,8 @@ const handleSubmit = async (e: Event) => {
 
   try {
     const res: any = await authStore.login({
-      email: email.value,
-      password: password.value,
+      email: emailVal(),
+      password: passwordVal(),
     })
 
     if (res?.status === 'success' || res?.data?.token || res?.token) {
@@ -86,7 +98,7 @@ const handleSubmit = async (e: Event) => {
             name="email"
             type="email"
             autocomplete="email"
-            :value="email"
+            :value="emailVal()"
             @input="handleEmailChange"
             class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
           />
@@ -102,7 +114,7 @@ const handleSubmit = async (e: Event) => {
             name="password"
             type="password"
             autocomplete="current-password"
-            :value="password"
+            :value="passwordVal()"
             @input="handlePasswordChange"
             class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
           />
@@ -124,9 +136,9 @@ const handleSubmit = async (e: Event) => {
 
       <div class="text-sm text-center">
         Belum punya akun?
-        <NuxtLink to="/auth/register" class="font-medium text-indigo-600 hover:text-indigo-500">
+        <a href="/auth/register" class="font-medium text-indigo-600 hover:text-indigo-500">
           Daftar di sini
-        </NuxtLink>
+        </a>
       </div>
     </form>
   </AuthLayout>
