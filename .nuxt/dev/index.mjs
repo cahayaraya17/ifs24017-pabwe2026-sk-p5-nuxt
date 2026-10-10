@@ -40,7 +40,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname as dirname$1, resolve as resolve$1 } from 'file://D:/Tugas%20PABWE/ifs24017-pabwe2026-sk-p5-nuxt/node_modules/pathe/dist/index.mjs';
 import { walkResolver } from 'file://D:/Tugas%20PABWE/ifs24017-pabwe2026-sk-p5-nuxt/node_modules/unhead/dist/utils.mjs';
 
-const serverAssets = [{"baseName":"server","dir":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/src/server/assets"}];
 
 const assets$1 = createStorage();
 
@@ -53,7 +53,7 @@ const storage = createStorage({});
 storage.mount('/assets', assets$1);
 
 storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt","watchOptions":{"ignored":[null]}}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/server","watchOptions":{"ignored":[null]}}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/src/server","watchOptions":{"ignored":[null]}}));
 storage.mount('cache:nuxt:payload', file_58_47_47_47D_58_47Tugas_3720PABWE_47ifs24017_45pabwe2026_45sk_45p5_45nuxt_47node_modules_47_64nuxt_47nitro_45server_47dist_47runtime_47utils_47cache_45driver_46js({"driver":"file:///D:/Tugas%20PABWE/ifs24017-pabwe2026-sk-p5-nuxt/node_modules/@nuxt/nitro-server/dist/runtime/utils/cache-driver.js","base":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/.nuxt/cache/nuxt/payload"}));
 storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/.nuxt"}));
 storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/.nuxt/cache"}));
@@ -2038,7 +2038,7 @@ async function errorHandler(error, event) {
 
 const rootDir = "D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt";
 
-const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[],"htmlAttrs":{"lang":"id"}};
+const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[{"rel":"preconnect","href":"https://fonts.googleapis.com"},{"rel":"preconnect","href":"https://fonts.gstatic.com","crossorigin":""}],"style":[],"script":[],"noscript":[],"htmlAttrs":{"lang":"id"}};
 
 const appRootTag = "div";
 
@@ -2142,22 +2142,7 @@ const plugins = [
 _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1af8c-zOFZpqP+sg9UEyZBO8crulHFRZ4\"",
-    "mtime": "2026-10-10T04:34:53.535Z",
-    "size": 110476,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"6c47f-oigQvB5aZ0qJFOjZBUu9KsgYryI\"",
-    "mtime": "2026-10-10T04:34:53.535Z",
-    "size": 443519,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -2348,7 +2333,7 @@ function createSSRContext(event) {
 		url,
 		event,
 		runtimeConfig: useRuntimeConfig(event),
-		noSSR: event.context.nuxt?.noSSR || (false),
+		noSSR: true,
 		head: createHead(unheadOptions),
 		error: false,
 		nuxt: undefined,
@@ -2460,7 +2445,7 @@ function lazyCachedFunction(fn) {
 	};
 }
 function getRenderer(ssrContext) {
-	return ssrContext.noSSR ? getSPARenderer() : getSSRRenderer();
+	return getSPARenderer() ;
 }
 // @ts-expect-error file will be produced after app build
 const getSSRStyles = lazyCachedFunction(() => Promise.resolve().then(function () { return styles$1; }).then((r) => r.default || r));
@@ -3192,7 +3177,7 @@ function renderPayloadJsonScript(opts) {
 		"type": "application/json",
 		"innerHTML": contents,
 		"data-nuxt-data": appId,
-		"data-ssr": !(opts.ssrContext.noSSR)
+		"data-ssr": false
 	};
 	{
 		payload.id = "__NUXT_DATA__";
@@ -3277,7 +3262,7 @@ async function renderRoute(event, ssrError) {
 		event._path = event.node.req.url = ssrContext.url;
 	}
 	
-	const renderer = await getRenderer(ssrContext);
+	const renderer = await getRenderer();
 	const _rendered = await renderer.renderToString(ssrContext).catch(async (error) => {
 		
 		

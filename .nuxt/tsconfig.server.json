@@ -18,10 +18,10 @@
         "./types/nitro-imports"
       ],
       "~/*": [
-        "../*"
+        "../src/*"
       ],
       "@/*": [
-        "../*"
+        "../src/*"
       ],
       "~~/*": [
         "../*"
@@ -93,22 +93,22 @@
         "../shared/*"
       ],
       "assets": [
-        "../assets"
+        "../src/assets"
       ],
       "assets/*": [
-        "../assets/*"
+        "../src/assets/*"
       ],
       "public": [
-        "../public"
+        "../src/public"
       ],
       "public/*": [
-        "../public/*"
+        "../src/public/*"
       ],
       "#server": [
-        "../server"
+        "../src/server"
       ],
       "#server/*": [
-        "../server/*"
+        "../src/server/*"
       ],
       "#build": [
         "./"
@@ -135,7 +135,7 @@
     "./types/nitro-nuxt.d.ts",
     "../node_modules/runtime/server",
     "../node_modules/dist/runtime/server",
-    "../server/**/*",
+    "../src/server/**/*",
     "../shared/**/*.d.ts",
     "./types/nitro.d.ts",
     "../**/*"
