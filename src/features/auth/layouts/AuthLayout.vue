@@ -22,7 +22,9 @@ withDefaults(
           {{ subtitle }}
         </p>
       </header>
-      <slot />
+      <slot>
+        <router-view />
+      </slot>
     </div>
   </main>
 </template>

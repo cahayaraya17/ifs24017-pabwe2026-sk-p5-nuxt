@@ -16,6 +16,11 @@ export interface UserResponse<T = any> {
   data?: T
 }
 
+export interface UpdatePasswordPayload {
+  current_password: string
+  password: string
+}
+
 export async function getUsersApi(): Promise<UserResponse<UserItem[]>> {
   return customFetch<UserResponse<UserItem[]>>('/users')
 }
@@ -24,10 +29,17 @@ export async function getProfileApi(): Promise<UserResponse<UserItem>> {
   return customFetch<UserResponse<UserItem>>('/users/me')
 }
 
-export async function updateProfileApi(payload: { name?: string; bio?: string }): Promise<UserResponse<UserItem>> {
+export async function updateProfileApi(payload: { name: string; bio?: string }): Promise<UserResponse<UserItem>> {
+  const body: { name: string; bio?: string } = {
+    name: payload.name.trim(),
+  }
+  if (typeof payload.bio === 'string') {
+    body.bio = payload.bio.trim()
+  }
+
   return customFetch<UserResponse<UserItem>>('/users/me', {
     method: 'PUT',
-    body: JSON.stringify(payload),
+    body: JSON.stringify(body),
   })
 }
 
@@ -48,9 +60,12 @@ export async function uploadPhotoApi(formData: FormData): Promise<UserResponse<{
   return res.json()
 }
 
-export async function updatePasswordApi(payload: { old_password?: string; current_password?: string; password: string }): Promise<UserResponse> {
+export async function updatePasswordApi(payload: UpdatePasswordPayload): Promise<UserResponse> {
   return customFetch<UserResponse>('/users/me/password', {
     method: 'PUT',
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      current_password: payload.current_password,
+      password: payload.password,
+    }),
   })
 }

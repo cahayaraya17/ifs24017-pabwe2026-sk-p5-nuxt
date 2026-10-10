@@ -12,47 +12,64 @@ const profileForm = reactive({
 })
 
 const passwordForm = reactive({
-  old_password: '',
+  current_password: '',
   password: '',
   confirm_password: '',
 })
 
 onMounted(async () => {
-  await usersStore.fetchProfile()
-  if (usersStore.currentUser) {
-    profileForm.name = usersStore.currentUser.name || ''
-    profileForm.bio = usersStore.currentUser.bio || ''
+  try {
+    await usersStore.fetchProfile()
+    if (usersStore.currentUser) {
+      profileForm.name = usersStore.currentUser.name || ''
+      profileForm.bio = usersStore.currentUser.bio || ''
+    }
+  } catch {
+    // fallback
   }
 })
 
 async function handleSaveProfile() {
+  if (!profileForm.name.trim()) {
+    return showErrorDialog('Nama lengkap wajib diisi')
+  }
+
   try {
-    const res = await usersStore.updateProfile(profileForm)
-    if (res?.status === 'success') {
-      await showSuccessDialog('Profil berhasil diperbarui')
-    }
+    const res = await usersStore.updateProfile({
+      name: profileForm.name.trim(),
+      bio: profileForm.bio.trim(),
+    })
+    await showSuccessDialog(res?.message || 'Profil berhasil diperbarui')
   } catch (err: any) {
-    await showErrorDialog(err.message || 'Gagal memperbarui profil')
+    await showErrorDialog(err?.message || 'Gagal memperbarui profil')
   }
 }
 
 async function handleSavePassword() {
+  if (!passwordForm.current_password) {
+    return showErrorDialog('Kata sandi saat ini wajib diisi')
+  }
+  if (!passwordForm.password) {
+    return showErrorDialog('Kata sandi baru wajib diisi')
+  }
+  if (passwordForm.password.length < 6) {
+    return showErrorDialog('Kata sandi baru minimal 6 karakter')
+  }
   if (passwordForm.password !== passwordForm.confirm_password) {
     return showErrorDialog('Konfirmasi kata sandi tidak cocok')
   }
+
   try {
     const res = await usersStore.updatePassword({
-      current_password: passwordForm.old_password,
+      current_password: passwordForm.current_password,
       password: passwordForm.password,
     })
-    if (res?.status === 'success') {
-      await showSuccessDialog('Kata sandi berhasil diperbarui')
-      passwordForm.old_password = ''
-      passwordForm.password = ''
-      passwordForm.confirm_password = ''
-    }
+    await showSuccessDialog(res?.message || 'Kata sandi berhasil diperbarui')
+    passwordForm.current_password = ''
+    passwordForm.password = ''
+    passwordForm.confirm_password = ''
   } catch (err: any) {
-    await showErrorDialog(err.message || 'Gagal mengubah kata sandi')
+    await showErrorDialog(err?.message || 'Gagal mengubah kata sandi')
   }
 }
 </script>
@@ -65,15 +82,18 @@ async function handleSavePassword() {
         <p class="text-sm text-slate-500 mt-1">Kelola informasi pribadi dan keamanan akun Anda.</p>
       </div>
 
+      <!-- Informasi Pribadi -->
       <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-4">
         <h2 class="text-lg font-bold text-slate-900">Informasi Pribadi</h2>
         <form @submit.prevent="handleSaveProfile" class="space-y-4">
           <div>
-            <label class="block text-sm font-semibold text-slate-700">Nama</label>
+            <label class="block text-sm font-semibold text-slate-700">Nama Lengkap</label>
             <input
               v-model="profileForm.name"
               type="text"
-              class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-sky-600 focus:ring-1 focus:ring-sky-600"
+              required
+              placeholder="Nama Lengkap Anda"
+              class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-sky-600 focus:ring-1 focus:ring-sky-600 sm:text-sm"
             />
           </div>
           <div>
@@ -81,27 +101,32 @@ async function handleSavePassword() {
             <textarea
               v-model="profileForm.bio"
               rows="3"
-              class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-sky-600 focus:ring-1 focus:ring-sky-600"
+              placeholder="Deskripsi singkat mengenai Anda"
+              class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-sky-600 focus:ring-1 focus:ring-sky-600 sm:text-sm"
             ></textarea>
           </div>
           <button
             type="submit"
-            class="px-5 py-2.5 bg-sky-700 text-white font-semibold rounded-lg hover:bg-sky-800 transition"
+            :disabled="usersStore.isLoading"
+            class="px-5 py-2.5 bg-sky-700 text-white font-semibold rounded-lg hover:bg-sky-800 disabled:opacity-50 transition text-sm"
           >
-            Simpan Profil
+            {{ usersStore.isLoading ? 'Menyimpan...' : 'Simpan Profil' }}
           </button>
         </form>
       </section>
 
+      <!-- Ubah Kata Sandi -->
       <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-4">
         <h2 class="text-lg font-bold text-slate-900">Ubah Kata Sandi</h2>
         <form @submit.prevent="handleSavePassword" class="space-y-4">
           <div>
             <label class="block text-sm font-semibold text-slate-700">Kata Sandi Saat Ini</label>
             <input
-              v-model="passwordForm.old_password"
+              v-model="passwordForm.current_password"
               type="password"
-              class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-sky-600 focus:ring-1 focus:ring-sky-600"
+              required
+              placeholder="••••••••"
+              class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-sky-600 focus:ring-1 focus:ring-sky-600 sm:text-sm"
             />
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -110,7 +135,9 @@ async function handleSavePassword() {
               <input
                 v-model="passwordForm.password"
                 type="password"
-                class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-sky-600 focus:ring-1 focus:ring-sky-600"
+                required
+                placeholder="••••••••"
+                class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-sky-600 focus:ring-1 focus:ring-sky-600 sm:text-sm"
               />
             </div>
             <div>
@@ -118,15 +145,18 @@ async function handleSavePassword() {
               <input
                 v-model="passwordForm.confirm_password"
                 type="password"
-                class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-sky-600 focus:ring-1 focus:ring-sky-600"
+                required
+                placeholder="••••••••"
+                class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-sky-600 focus:ring-1 focus:ring-sky-600 sm:text-sm"
               />
             </div>
           </div>
           <button
             type="submit"
-            class="px-5 py-2.5 bg-sky-700 text-white font-semibold rounded-lg hover:bg-sky-800 transition"
+            :disabled="usersStore.isLoading"
+            class="px-5 py-2.5 bg-sky-700 text-white font-semibold rounded-lg hover:bg-sky-800 disabled:opacity-50 transition text-sm"
           >
-            Perbarui Kata Sandi
+            {{ usersStore.isLoading ? 'Memproses...' : 'Perbarui Kata Sandi' }}
           </button>
         </form>
       </section>

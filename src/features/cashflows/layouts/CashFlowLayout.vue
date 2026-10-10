@@ -17,7 +17,9 @@ onMounted(() => {
     <div class="flex flex-1">
       <SidebarComponent />
       <main class="flex-1 p-6 md:p-8 max-w-7xl mx-auto w-full">
-        <slot />
+        <slot>
+          <router-view />
+        </slot>
       </main>
     </div>
   </div>
