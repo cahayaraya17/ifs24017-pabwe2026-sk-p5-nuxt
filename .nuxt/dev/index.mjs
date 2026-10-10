@@ -2145,16 +2145,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1b0a7-0yUJEeQN2b7SRMgAL8g3DMK1MAE\"",
-    "mtime": "2026-10-10T04:28:38.082Z",
-    "size": 110759,
+    "etag": "\"1afad-r7v47AciDUUSuPVLZvKgqp3Mcb0\"",
+    "mtime": "2026-10-10T04:31:25.096Z",
+    "size": 110509,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"6c481-Awyevk3YuKtkxkVN3vZFHGZmAa4\"",
-    "mtime": "2026-10-10T04:28:38.083Z",
-    "size": 443521,
+    "etag": "\"6c31a-kAan07SOqce4HNQQ2GD9AtiIVmQ\"",
+    "mtime": "2026-10-10T04:31:25.096Z",
+    "size": 443162,
     "path": "index.mjs.map"
   }
 };
@@ -2348,7 +2348,7 @@ function createSSRContext(event) {
 		url,
 		event,
 		runtimeConfig: useRuntimeConfig(event),
-		noSSR: event.context.nuxt?.noSSR || (false),
+		noSSR: true,
 		head: createHead(unheadOptions),
 		error: false,
 		nuxt: undefined,
@@ -2460,7 +2460,7 @@ function lazyCachedFunction(fn) {
 	};
 }
 function getRenderer(ssrContext) {
-	return ssrContext.noSSR ? getSPARenderer() : getSSRRenderer();
+	return getSPARenderer() ;
 }
 // @ts-expect-error file will be produced after app build
 const getSSRStyles = lazyCachedFunction(() => Promise.resolve().then(function () { return styles$1; }).then((r) => r.default || r));
@@ -3192,7 +3192,7 @@ function renderPayloadJsonScript(opts) {
 		"type": "application/json",
 		"innerHTML": contents,
 		"data-nuxt-data": appId,
-		"data-ssr": !(opts.ssrContext.noSSR)
+		"data-ssr": false
 	};
 	{
 		payload.id = "__NUXT_DATA__";
@@ -3277,7 +3277,7 @@ async function renderRoute(event, ssrError) {
 		event._path = event.node.req.url = ssrContext.url;
 	}
 	
-	const renderer = await getRenderer(ssrContext);
+	const renderer = await getRenderer();
 	const _rendered = await renderer.renderToString(ssrContext).catch(async (error) => {
 		
 		
