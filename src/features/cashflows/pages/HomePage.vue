@@ -125,18 +125,18 @@ async function handleDeleteAll() {
 
       <!-- Filters -->
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap gap-4 items-center">
-        <select v-model="filters.type" @change="applyFilter" class="rounded-lg border border-slate-300 p-2 text-sm">
+        <select v-model="filters.type" @change="applyFilter" class="rounded-lg border border-slate-300 p-2 text-sm" aria-label="Filter tipe arus kas">
           <option value="">Semua Tipe</option>
           <option value="inflow">Inflow</option>
           <option value="outflow">Outflow</option>
         </select>
-        <select v-model="filters.source" @change="applyFilter" class="rounded-lg border border-slate-300 p-2 text-sm">
+        <select v-model="filters.source" @change="applyFilter" class="rounded-lg border border-slate-300 p-2 text-sm" aria-label="Filter sumber arus kas">
           <option value="">Semua Sumber</option>
           <option value="cash">Cash</option>
           <option value="savings">Savings</option>
           <option value="loans">Loans</option>
         </select>
-        <select v-model="filters.label" @change="applyFilter" class="rounded-lg border border-slate-300 p-2 text-sm">
+        <select v-model="filters.label" @change="applyFilter" class="rounded-lg border border-slate-300 p-2 text-sm" aria-label="Filter label arus kas">
           <option value="">Semua Label</option>
           <option v-for="l in store.labels" :key="l" :value="l">{{ l }}</option>
         </select>
