@@ -1,97 +1,113 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AuthLayout from '../layouts/AuthLayout.vue'
 import { useAuthStore } from '../states/authStore'
-import { showSuccessDialog, showErrorDialog } from '../../../helpers/toolsHelper'
+import { useInput } from '../../../hooks/useInput'
+import Swal from 'sweetalert2'
 
 const router = useRouter()
 const authStore = useAuthStore()
 
-const form = reactive({
-  email: '',
-  password: '',
-})
+const [email, handleEmailChange] = useInput('')
+const [password, handlePasswordChange] = useInput('')
 
-const errors = reactive({
-  email: '',
-  password: '',
-})
+const emailError = ref('')
+const passwordError = ref('')
 
-function validate(): boolean {
+const validate = () => {
   let isValid = true
-  errors.email = ''
-  errors.password = ''
+  emailError.value = ''
+  passwordError.value = ''
 
-  if (!form.email) {
-    errors.email = 'Email wajib diisi'
+  if (!email.value) {
+    emailError.value = 'Email wajib diisi'
     isValid = false
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-    errors.email = 'Format email tidak valid'
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    emailError.value = 'Format email tidak valid'
     isValid = false
   }
 
-  if (!form.password) {
-    errors.password = 'Kata sandi wajib diisi'
+  if (!password.value) {
+    passwordError.value = 'Password wajib diisi'
     isValid = false
-  } else if (form.password.length < 6) {
-    errors.password = 'Kata sandi minimal 6 karakter'
+  } else if (password.value.length < 6) {
+    passwordError.value = 'Password minimal 6 karakter'
     isValid = false
   }
 
   return isValid
 }
 
-async function handleSubmit() {
+const handleSubmit = async (e: Event) => {
+  e.preventDefault()
   if (!validate()) return
 
   try {
-    const res = await authStore.login({
-      email: form.email,
-      password: form.password,
+    const res: any = await authStore.login({
+      email: email.value,
+      password: password.value,
     })
 
-    if (res?.status === 'success') {
-      showSuccessDialog(res.message || 'Login berhasil')
-      await router.push('/')
+    if (res?.status === 'success' || res?.data?.token || res?.token) {
+      await Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: res?.message || 'Login berhasil',
+        timer: 1500,
+        showConfirmButton: false,
+      })
+      router.push('/')
     } else {
-      await showErrorDialog(res?.message || 'Login gagal')
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: res?.message || 'Login gagal, periksa email dan password Anda',
+      })
     }
-  } catch (error: any) {
-    await showErrorDialog(error?.message || 'Tidak dapat terhubung ke server')
+  } catch (err: any) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Terjadi Kesalahan',
+      text: err?.message || 'Terjadi kesalahan pada sistem',
+    })
   }
 }
 </script>
 
 <template>
-  <AuthLayout title="Masuk ke Akun" subtitle="Kelola catatan kas Anda secara aman.">
-    <form class="space-y-4" @submit.prevent="handleSubmit">
+  <AuthLayout title="Masuk Akun" subtitle="Silakan isi formulir di bawah ini.">
+    <form class="space-y-6" @submit="handleSubmit">
       <div>
-        <label for="login-email-input" class="block text-sm font-semibold text-slate-700">Email</label>
-        <input
-          id="login-email-input"
-          name="email"
-          v-model="form.email"
-          type="email"
-          autocomplete="email"
-          placeholder="nama@email.com"
-          class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 shadow-sm focus:border-sky-600 focus:outline-none focus:ring-1 focus:ring-sky-600 sm:text-sm"
-        />
-        <p v-if="errors.email" class="mt-1 text-xs text-red-600">{{ errors.email }}</p>
+        <label for="login-email-input" class="block text-sm font-medium text-gray-700">Email</label>
+        <div class="mt-1">
+          <input
+            id="login-email-input"
+            name="email"
+            type="email"
+            autocomplete="email"
+            :value="email"
+            @input="handleEmailChange"
+            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+          />
+          <p v-if="emailError" class="mt-1 text-sm text-red-600">{{ emailError }}</p>
+        </div>
       </div>
 
       <div>
-        <label for="login-password-input" class="block text-sm font-semibold text-slate-700">Kata Sandi</label>
-        <input
-          id="login-password-input"
-          name="password"
-          v-model="form.password"
-          type="password"
-          autocomplete="current-password"
-          placeholder="••••••••"
-          class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 shadow-sm focus:border-sky-600 focus:outline-none focus:ring-1 focus:ring-sky-600 sm:text-sm"
-        />
-        <p v-if="errors.password" class="mt-1 text-xs text-red-600">{{ errors.password }}</p>
+        <label for="login-password-input" class="block text-sm font-medium text-gray-700">Password</label>
+        <div class="mt-1">
+          <input
+            id="login-password-input"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            :value="password"
+            @input="handlePasswordChange"
+            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+          />
+          <p v-if="passwordError" class="mt-1 text-sm text-red-600">{{ passwordError }}</p>
+        </div>
       </div>
 
       <div>
@@ -99,17 +115,18 @@ async function handleSubmit() {
           id="login-submit-button"
           type="submit"
           :disabled="authStore.isAuthLogin"
-          class="w-full rounded-lg bg-sky-700 py-2.5 px-4 text-sm font-semibold text-white shadow hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-600 disabled:opacity-50"
+          class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
         >
-          {{ authStore.isAuthLogin ? 'Memproses...' : 'Masuk' }}
+          <span v-if="authStore.isAuthLogin">Memproses...</span>
+          <span v-else>Masuk</span>
         </button>
       </div>
 
-      <div class="text-center text-sm text-slate-600 pt-2">
+      <div class="text-sm text-center">
         Belum punya akun?
-        <router-link to="/auth/register" class="font-semibold text-sky-700 hover:text-sky-800">
-          Daftar akun baru
-        </router-link>
+        <NuxtLink to="/auth/register" class="font-medium text-indigo-600 hover:text-indigo-500">
+          Daftar di sini
+        </NuxtLink>
       </div>
     </form>
   </AuthLayout>
