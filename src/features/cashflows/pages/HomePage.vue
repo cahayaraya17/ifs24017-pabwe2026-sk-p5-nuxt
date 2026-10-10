@@ -184,7 +184,7 @@ async function handleDeleteAll() {
               </td>
             </tr>
             <tr v-if="!store.cashFlows.length">
-              <td colspan="6" class="p-8 text-center text-slate-400">Belum ada transaksi tercatat.</td>
+              <td colspan="6" class="p-8 text-center text-slate-600">Belum ada transaksi tercatat.</td>
             </tr>
           </tbody>
         </table>
