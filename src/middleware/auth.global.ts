@@ -1,22 +1,13 @@
 export default defineNuxtRouteMiddleware((to) => {
-  if (import.meta.server) return
+  // Biarkan halaman auth bebas diakses tanpa redirect paksa di SSR/initial load
+  if (to.path.startsWith('/auth')) {
+    return
+  }
 
-  let token = null
-  if (typeof window !== 'undefined') {
-    token = localStorage.getItem('cashflow_access_token') || localStorage.getItem('token')
-    if (!token && document.cookie) {
-      const match = document.cookie.match(/(?:^|;\s*)(?:cashflow_access_token|token)=([^;]+)/)
-      if (match) token = match[1]
+  if (import.meta.client) {
+    const token = localStorage.getItem('cashflow_access_token') || localStorage.getItem('token')
+    if (!token) {
+      return navigateTo('/auth/login')
     }
-  }
-
-  const isAuthRoute = to.path.startsWith('/auth')
-
-  if (!token && !isAuthRoute) {
-    return navigateTo('/auth/login')
-  }
-
-  if (token && isAuthRoute) {
-    return navigateTo('/')
   }
 })
