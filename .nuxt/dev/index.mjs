@@ -2038,7 +2038,7 @@ async function errorHandler(error, event) {
 
 const rootDir = "D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt";
 
-const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[{"rel":"preconnect","href":"https://fonts.googleapis.com"},{"rel":"preconnect","href":"https://fonts.gstatic.com","crossorigin":""}],"style":[],"script":[],"noscript":[],"htmlAttrs":{"lang":"id"}};
+const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[],"htmlAttrs":{"lang":"id"}};
 
 const appRootTag = "div";
 
@@ -2145,16 +2145,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1afad-r7v47AciDUUSuPVLZvKgqp3Mcb0\"",
-    "mtime": "2026-10-10T04:31:25.096Z",
-    "size": 110509,
+    "etag": "\"1af8c-zOFZpqP+sg9UEyZBO8crulHFRZ4\"",
+    "mtime": "2026-10-10T04:34:53.535Z",
+    "size": 110476,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"6c31a-kAan07SOqce4HNQQ2GD9AtiIVmQ\"",
-    "mtime": "2026-10-10T04:31:25.096Z",
-    "size": 443162,
+    "etag": "\"6c47f-oigQvB5aZ0qJFOjZBUu9KsgYryI\"",
+    "mtime": "2026-10-10T04:34:53.535Z",
+    "size": 443519,
     "path": "index.mjs.map"
   }
 };
@@ -2348,7 +2348,7 @@ function createSSRContext(event) {
 		url,
 		event,
 		runtimeConfig: useRuntimeConfig(event),
-		noSSR: true,
+		noSSR: event.context.nuxt?.noSSR || (false),
 		head: createHead(unheadOptions),
 		error: false,
 		nuxt: undefined,
@@ -2460,7 +2460,7 @@ function lazyCachedFunction(fn) {
 	};
 }
 function getRenderer(ssrContext) {
-	return getSPARenderer() ;
+	return ssrContext.noSSR ? getSPARenderer() : getSSRRenderer();
 }
 // @ts-expect-error file will be produced after app build
 const getSSRStyles = lazyCachedFunction(() => Promise.resolve().then(function () { return styles$1; }).then((r) => r.default || r));
@@ -3192,7 +3192,7 @@ function renderPayloadJsonScript(opts) {
 		"type": "application/json",
 		"innerHTML": contents,
 		"data-nuxt-data": appId,
-		"data-ssr": false
+		"data-ssr": !(opts.ssrContext.noSSR)
 	};
 	{
 		payload.id = "__NUXT_DATA__";
@@ -3277,7 +3277,7 @@ async function renderRoute(event, ssrError) {
 		event._path = event.node.req.url = ssrContext.url;
 	}
 	
-	const renderer = await getRenderer();
+	const renderer = await getRenderer(ssrContext);
 	const _rendered = await renderer.renderToString(ssrContext).catch(async (error) => {
 		
 		
