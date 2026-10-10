@@ -103,7 +103,7 @@ async function handleDeleteAll() {
         </div>
         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <span class="text-xs font-semibold text-slate-500">Total Pemasukan</span>
-          <p class="text-lg font-bold text-emerald-600 mt-1">{{ formatRupiah(store.stats.total_inflow || 0) }}</p>
+          <p class="text-lg font-bold text-emerald-700 mt-1">{{ formatRupiah(store.stats.total_inflow || 0) }}</p>
         </div>
         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <span class="text-xs font-semibold text-slate-500">Total Pengeluaran</span>
@@ -168,7 +168,7 @@ async function handleDeleteAll() {
               </td>
               <td class="p-4 font-semibold text-slate-800">{{ item.label }}</td>
               <td class="p-4 capitalize">{{ item.source }}</td>
-              <td class="p-4 font-bold" :class="item.type === 'inflow' ? 'text-emerald-600' : 'text-rose-600'">
+              <td class="p-4 font-bold" :class="item.type === 'inflow' ? 'text-emerald-700' : 'text-rose-600'">
                 {{ formatRupiah(item.nominal) }}
               </td>
               <td class="p-4 text-right space-x-2 whitespace-nowrap">

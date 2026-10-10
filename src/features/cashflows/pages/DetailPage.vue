@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CashFlowLayout from '../layouts/CashFlowLayout.vue'
@@ -43,7 +43,7 @@ async function handleDelete() {
             </span>
             <h1 class="text-2xl font-black text-slate-900 mt-2">{{ store.cashFlow.label }}</h1>
           </div>
-          <p class="text-2xl font-black" :class="store.cashFlow.type === 'inflow' ? 'text-emerald-600' : 'text-rose-600'">
+          <p class="text-2xl font-black" :class="store.cashFlow.type === 'inflow' ? 'text-emerald-700' : 'text-rose-600'">
             {{ formatRupiah(store.cashFlow.nominal) }}
           </p>
         </div>

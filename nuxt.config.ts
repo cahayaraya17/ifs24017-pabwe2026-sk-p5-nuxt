@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   devServer: {
     port: Number(process.env.APP_PORT || 3000),
   },
-  app: {
+  app: { head: { htmlAttrs: { lang: 'id' } },
     head: {
       title: 'Delcom Cash Flow',
       meta: [

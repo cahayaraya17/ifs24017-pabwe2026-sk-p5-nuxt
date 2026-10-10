@@ -13,12 +13,12 @@ onMounted(() => {
 <template>
   <CashFlowLayout>
     <div class="space-y-6">
-      <div class="border-b border-slate-200 pb-4">
-        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Direktori Pengguna</h1>
-        <p class="text-sm text-slate-500 mt-1">Daftar pengguna yang terdaftar di ekosistem Delcom.</p>
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">Direktori Pengguna</h1>
+        <p class="text-sm text-slate-500 mt-1">Pengguna Delcom Cash Flow</p>
       </div>
 
-      <div v-if="usersStore.isLoading" class="text-center py-12 text-slate-500 font-medium">
+      <div v-if="usersStore.isLoading" class="text-center py-10 text-slate-500">
         Memuat data pengguna...
       </div>
 
@@ -26,17 +26,17 @@ onMounted(() => {
         <div
           v-for="user in usersStore.users"
           :key="user.id"
-          class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex items-center space-x-4 hover:shadow-md transition"
+          class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex items-start gap-4"
         >
           <img
-            :src="user.photo || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user.name"
-            alt="Avatar"
-            class="w-14 h-14 rounded-full border border-slate-100 object-cover bg-slate-50"
+            :src="user.photo || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name)"
+            :alt="user.name"
+            class="w-12 h-12 rounded-full object-cover border border-slate-200"
           />
-          <div class="overflow-hidden">
-            <h3 class="font-bold text-slate-900 truncate">{{ user.name }}</h3>
-            <p class="text-xs text-sky-700 font-medium truncate">{{ user.email }}</p>
-            <p class="text-xs text-slate-500 mt-1 line-clamp-1">{{ user.bio || 'Pengguna Delcom Cash Flow' }}</p>
+          <div class="flex-1 min-w-0">
+            <h2 class="text-base font-bold text-slate-900 truncate">{{ user.name }}</h2>
+            <p class="text-sm text-slate-500 truncate">{{ user.email }}</p>
+            <p v-if="user.bio" class="text-xs text-slate-600 mt-2 line-clamp-2">{{ user.bio }}</p>
           </div>
         </div>
       </div>
