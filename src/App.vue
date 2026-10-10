@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main role="main">
     <NuxtPage />
-  </div>
+  </main>
 </template>
