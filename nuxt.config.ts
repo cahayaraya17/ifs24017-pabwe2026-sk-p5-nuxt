@@ -12,6 +12,14 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  vite: {
+    build: {
+      cssCodeSplit: false,
+    },
+  },
+  features: {
+    inlineStyles: true,
+  },
   nitro: {
     preset: 'vercel-static',
     prerender: {
