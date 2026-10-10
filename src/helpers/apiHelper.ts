@@ -2,17 +2,20 @@ export const ACCESS_TOKEN_KEY = 'cashflow_access_token'
 
 export function getAccessToken(): string | null {
   if (typeof window === 'undefined' || typeof localStorage === 'undefined') return null
-  return localStorage.getItem(ACCESS_TOKEN_KEY)
+  return localStorage.getItem(ACCESS_TOKEN_KEY) || localStorage.getItem('token') || localStorage.getItem('auth_token')
 }
 
 export function putAccessToken(token: string): void {
   if (typeof window === 'undefined' || typeof localStorage === 'undefined') return
   localStorage.setItem(ACCESS_TOKEN_KEY, token)
+  localStorage.setItem('token', token)
 }
 
 export function removeAccessToken(): void {
   if (typeof window === 'undefined' || typeof localStorage === 'undefined') return
   localStorage.removeItem(ACCESS_TOKEN_KEY)
+  localStorage.removeItem('token')
+  localStorage.removeItem('auth_token')
 }
 
 export function getBaseUrl(overrideUrl?: string): string {
