@@ -1,15 +1,22 @@
 export default defineNuxtRouteMiddleware((to) => {
   if (import.meta.server) return
 
-  const token = localStorage.getItem('cashflow_access_token') || localStorage.getItem('token')
+  let token = null
+  if (typeof window !== 'undefined') {
+    token = localStorage.getItem('cashflow_access_token') || localStorage.getItem('token')
+    if (!token && document.cookie) {
+      const match = document.cookie.match(/(?:^|;\s*)(?:cashflow_access_token|token)=([^;]+)/)
+      if (match) token = match[1]
+    }
+  }
 
-  // Jika belum login dan tidak di halaman auth, arahkan ke login
-  if (!token && !to.path.startsWith('/auth')) {
+  const isAuthRoute = to.path.startsWith('/auth')
+
+  if (!token && !isAuthRoute) {
     return navigateTo('/auth/login')
   }
 
-  // Jika sudah login dan mencoba akses login/register, arahkan ke dashboard
-  if (token && to.path.startsWith('/auth')) {
+  if (token && isAuthRoute) {
     return navigateTo('/')
   }
 })

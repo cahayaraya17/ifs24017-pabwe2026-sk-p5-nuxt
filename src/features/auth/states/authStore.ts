@@ -1,47 +1,61 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { postLoginApi, postRegisterApi, type LoginPayload, type RegisterPayload, type AuthApiResponse } from '../api/authApi'
-import { getAccessToken, putAccessToken, removeAccessToken } from '../../../helpers/apiHelper'
+import { apiHelper } from '../../../helpers/apiHelper'
 
 export const useAuthStore = defineStore('auth', () => {
-  const token = ref<string | null>(getAccessToken())
   const isAuthLogin = ref(false)
   const isAuthRegister = ref(false)
+  const user = ref<any>(null)
 
-  async function login(payload: LoginPayload): Promise<AuthApiResponse> {
+  function setToken(token: string) {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('cashflow_access_token', token)
+      localStorage.setItem('token', token)
+      document.cookie = `token=${token}; path=/; max-age=604800; SameSite=Lax`
+      document.cookie = `cashflow_access_token=${token}; path=/; max-age=604800; SameSite=Lax`
+    }
+  }
+
+  function clearToken() {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('cashflow_access_token')
+      localStorage.removeItem('token')
+      document.cookie = 'token=; path=/; max-age=0'
+      document.cookie = 'cashflow_access_token=; path=/; max-age=0'
+    }
+    user.value = null
+  }
+
+  async function login(payload: { email: string; password: string }) {
     isAuthLogin.value = true
     try {
-      const response = await postLoginApi(payload)
-      if (response.data?.token) {
-        token.value = response.data.token
-        putAccessToken(response.data.token)
+      const res: any = await apiHelper.post('/auth/login', payload)
+      if (res?.data?.token || res?.token) {
+        const token = res?.data?.token || res?.token
+        setToken(token)
       }
-      return response
+      return res
     } finally {
       isAuthLogin.value = false
     }
   }
 
-  async function register(payload: RegisterPayload): Promise<AuthApiResponse> {
+  async function register(payload: any) {
     isAuthRegister.value = true
     try {
-      return await postRegisterApi(payload)
+      return await apiHelper.post('/auth/register', payload)
     } finally {
       isAuthRegister.value = false
     }
   }
 
-  function logout() {
-    token.value = null
-    removeAccessToken()
-  }
-
   return {
-    token,
     isAuthLogin,
     isAuthRegister,
+    user,
+    setToken,
+    clearToken,
     login,
     register,
-    logout,
   }
 })
