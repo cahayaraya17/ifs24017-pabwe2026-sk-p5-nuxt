@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'vercel-static',
     prerender: {
-      crawlLinks: false,
+      crawlLinks: true,
       routes: [
         '/',
         '/cash-flows',
