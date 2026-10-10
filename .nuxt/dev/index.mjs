@@ -40,7 +40,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname as dirname$1, resolve as resolve$1 } from 'file://D:/Tugas%20PABWE/ifs24017-pabwe2026-sk-p5-nuxt/node_modules/pathe/dist/index.mjs';
 import { walkResolver } from 'file://D:/Tugas%20PABWE/ifs24017-pabwe2026-sk-p5-nuxt/node_modules/unhead/dist/utils.mjs';
 
-const serverAssets = [{"baseName":"server","dir":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/src/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/server/assets"}];
 
 const assets$1 = createStorage();
 
@@ -53,7 +53,7 @@ const storage = createStorage({});
 storage.mount('/assets', assets$1);
 
 storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt","watchOptions":{"ignored":[null]}}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/src/server","watchOptions":{"ignored":[null]}}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/server","watchOptions":{"ignored":[null]}}));
 storage.mount('cache:nuxt:payload', file_58_47_47_47D_58_47Tugas_3720PABWE_47ifs24017_45pabwe2026_45sk_45p5_45nuxt_47node_modules_47_64nuxt_47nitro_45server_47dist_47runtime_47utils_47cache_45driver_46js({"driver":"file:///D:/Tugas%20PABWE/ifs24017-pabwe2026-sk-p5-nuxt/node_modules/@nuxt/nitro-server/dist/runtime/utils/cache-driver.js","base":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/.nuxt/cache/nuxt/payload"}));
 storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/.nuxt"}));
 storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt/.nuxt/cache"}));
@@ -652,9 +652,7 @@ const _inlineRuntimeConfig = {
       }
     }
   },
-  "public": {
-    "delcomBaseUrl": "https://open-api.delcom.org/api/v1"
-  }
+  "public": {}
 };
 const envOptions = {
   prefix: "NITRO_",
@@ -2038,26 +2036,9 @@ async function errorHandler(error, event) {
   // H3 will handle fallback
 }
 
-const script = `
-if (!window.__NUXT_DEVTOOLS_TIME_METRIC__) {
-  Object.defineProperty(window, '__NUXT_DEVTOOLS_TIME_METRIC__', {
-    value: {},
-    enumerable: false,
-    configurable: true,
-  })
-}
-window.__NUXT_DEVTOOLS_TIME_METRIC__.appInit = Date.now()
-`;
-
-const _nCro_U0eaQKyBrhHCQymTdr6kye_AeBmw1oOvNX1S4 = (function(nitro) {
-  nitro.hooks.hook("render:html", (htmlContext) => {
-    htmlContext.head.push(`<script>${script}<\/script>`);
-  });
-});
-
 const rootDir = "D:/Tugas PABWE/ifs24017-pabwe2026-sk-p5-nuxt";
 
-const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"name":"description","content":"Aplikasi pencatatan keuangan Delcom Cash Flow"}],"link":[{"rel":"preconnect","href":"https://fonts.googleapis.com"},{"rel":"preconnect","href":"https://fonts.gstatic.com","crossorigin":""},{"rel":"stylesheet","href":"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"}],"style":[],"script":[],"noscript":[],"title":"Delcom Cash Flow"};
+const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[{"rel":"preconnect","href":"https://fonts.googleapis.com"},{"rel":"preconnect","href":"https://fonts.gstatic.com","crossorigin":""}],"style":[],"script":[],"noscript":[],"htmlAttrs":{"lang":"id"}};
 
 const appRootTag = "div";
 
@@ -2156,28 +2137,28 @@ function onConsoleLog(callback) {
 	consola$1.wrapConsole();
 }
 
+function defineNitroPlugin(def) {
+  return def;
+}
+
+const _AGsmFdC8WcW4AmKPY6uMwnpFmLHxpS1ojbtBDKht4KA = defineNitroPlugin((nitroApp) => {
+  nitroApp.hooks.hook("render:html", (htmlContext) => {
+    htmlContext.htmlAttrs.push('lang="id"');
+  });
+  nitroApp.hooks.hook("render:response", (response) => {
+    if (typeof response.body === "string" && response.body.includes("<html")) {
+      response.body = response.body.replace(/<html(?![^>]*\blang=)[^>]*>/i, '<html lang="id">');
+    }
+  });
+});
+
 const plugins = [
-  _nCro_U0eaQKyBrhHCQymTdr6kye_AeBmw1oOvNX1S4,
-_h6dmWcS1xgFJlfedmkQU5lynzxb0CevtlHnwnhB7jM,
+  _h6dmWcS1xgFJlfedmkQU5lynzxb0CevtlHnwnhB7jM,
+_AGsmFdC8WcW4AmKPY6uMwnpFmLHxpS1ojbtBDKht4KA,
 _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1b2b5-vz0xNgPK1LWRZd1E8fprIuk0v8k\"",
-    "mtime": "2026-10-10T03:33:54.743Z",
-    "size": 111285,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"6c7f6-QjP/oHWRn82NGowBlLqoCBcoM0A\"",
-    "mtime": "2026-10-10T03:33:54.745Z",
-    "size": 444406,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -2368,7 +2349,7 @@ function createSSRContext(event) {
 		url,
 		event,
 		runtimeConfig: useRuntimeConfig(event),
-		noSSR: true,
+		noSSR: event.context.nuxt?.noSSR || (false),
 		head: createHead(unheadOptions),
 		error: false,
 		nuxt: undefined,
@@ -2480,7 +2461,7 @@ function lazyCachedFunction(fn) {
 	};
 }
 function getRenderer(ssrContext) {
-	return getSPARenderer() ;
+	return ssrContext.noSSR ? getSPARenderer() : getSSRRenderer();
 }
 // @ts-expect-error file will be produced after app build
 const getSSRStyles = lazyCachedFunction(() => Promise.resolve().then(function () { return styles$1; }).then((r) => r.default || r));
@@ -3212,7 +3193,7 @@ function renderPayloadJsonScript(opts) {
 		"type": "application/json",
 		"innerHTML": contents,
 		"data-nuxt-data": appId,
-		"data-ssr": false
+		"data-ssr": !(opts.ssrContext.noSSR)
 	};
 	{
 		payload.id = "__NUXT_DATA__";
@@ -3297,7 +3278,7 @@ async function renderRoute(event, ssrError) {
 		event._path = event.node.req.url = ssrContext.url;
 	}
 	
-	const renderer = await getRenderer();
+	const renderer = await getRenderer(ssrContext);
 	const _rendered = await renderer.renderToString(ssrContext).catch(async (error) => {
 		
 		

@@ -3,10 +3,10 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: false },
   modules: ['@pinia/nuxt'],
-  css: ['~/assets/css/main.css'],
+  
   postcss: {
     plugins: {
-      tailwindcss: {},
+      '@tailwindcss/postcss': {},
       autoprefixer: {},
     },
   },
@@ -22,17 +22,6 @@ export default defineNuxtConfig({
     },
   },
   nitro: {
-    hooks: {
-      'prerender:generate'(route) {
-        if (route.contents) {
-          route.contents = route.contents.replace(/<html[^>]*>/, '<html lang="id">')
-        }
-      },
-    },
-  },
-  hooks: {
-    'nitro:config'(nitroConfig) {
-      nitroConfig.plugins = nitroConfig.plugins || []
-    },
+    preset: 'vercel',
   },
 })
