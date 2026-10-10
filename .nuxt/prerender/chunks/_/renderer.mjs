@@ -53,7 +53,7 @@ function createHead(options = {}) {
 
 const NUXT_RUNTIME_PAYLOAD_EXTRACTION = false;
 
-const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[{"rel":"preconnect","href":"https://fonts.googleapis.com"},{"rel":"preconnect","href":"https://fonts.gstatic.com","crossorigin":""}],"style":[],"script":[],"noscript":[],"htmlAttrs":{"lang":"id"}};
+const appHead = {"meta":[{"charset":"utf-8"},{"name":"description","content":"Aplikasi manajemen arus kas Delcom Cash Flow"},{"name":"viewport","content":"width=device-width, initial-scale=1"}],"link":[{"rel":"preconnect","href":"https://fonts.googleapis.com"},{"rel":"preconnect","href":"https://fonts.gstatic.com","crossorigin":""}],"style":[],"script":[],"noscript":[],"title":"Delcom Cash Flow","htmlAttrs":{"lang":"id"}};
 
 const appRootTag = "div";
 
