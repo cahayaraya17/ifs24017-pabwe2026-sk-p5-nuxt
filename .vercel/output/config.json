@@ -1,6 +1,9 @@
 {
   "version": 3,
   "overrides": {
+    "cash-flows/index.html": {
+      "path": "cash-flows"
+    },
     "users/index.html": {
       "path": "users"
     },
@@ -10,11 +13,11 @@
     "index.html": {
       "path": ""
     },
-    "auth/register/index.html": {
-      "path": "auth/register"
-    },
     "auth/login/index.html": {
       "path": "auth/login"
+    },
+    "auth/register/index.html": {
+      "path": "auth/register"
     }
   },
   "routes": [

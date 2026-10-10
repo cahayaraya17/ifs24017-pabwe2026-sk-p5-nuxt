@@ -14,6 +14,17 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: 'vercel-static',
+    prerender: {
+      crawlLinks: false,
+      routes: [
+        '/',
+        '/cash-flows',
+        '/users',
+        '/profile',
+        '/auth/login',
+        '/auth/register',
+      ],
+    },
   },
   app: {
     head: {
