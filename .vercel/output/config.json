@@ -1,14 +1,14 @@
 {
   "version": 3,
   "overrides": {
-    "users/index.html": {
-      "path": "users"
-    },
     "profile/index.html": {
       "path": "profile"
     },
     "cash-flows/index.html": {
       "path": "cash-flows"
+    },
+    "users/index.html": {
+      "path": "users"
     },
     "index.html": {
       "path": ""

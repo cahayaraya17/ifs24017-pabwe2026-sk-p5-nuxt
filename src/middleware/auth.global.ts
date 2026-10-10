@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware((to) => {
-  // Biarkan halaman auth bebas diakses tanpa redirect paksa di SSR/initial load
+  // Lewati pengecekan jika rute publik/auth
   if (to.path.startsWith('/auth')) {
     return
   }
