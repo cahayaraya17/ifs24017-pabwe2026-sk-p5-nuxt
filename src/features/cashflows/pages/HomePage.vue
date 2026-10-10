@@ -32,9 +32,9 @@ function applyFilter() {
 
 async function handleAdd(payload: any) {
   const res = await store.addCashFlow(payload)
-  if (res?.status === 'success') {
+  if (res?.status === 'success' || res?.message) {
     showAddModal.value = false
-    showSuccessDialog('Transaksi berhasil dicatat')
+    showSuccessDialog(res.message || 'Transaksi berhasil dicatat')
   }
 }
 
@@ -46,9 +46,9 @@ function openChange(item: CashFlow) {
 async function handleChange(payload: any) {
   if (!selectedCashFlow.value) return
   const res = await store.changeCashFlow(selectedCashFlow.value.id, payload)
-  if (res?.status === 'success') {
+  if (res?.status === 'success' || res?.message) {
     showChangeModal.value = false
-    showSuccessDialog('Transaksi berhasil diperbarui')
+    showSuccessDialog(res.message || 'Transaksi berhasil diperbarui')
   }
 }
 
@@ -95,7 +95,12 @@ async function handleDeleteAll() {
       </div>
 
       <!-- Stat Cards -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <!-- Saldo Kas Bersih -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm col-span-2 sm:col-span-1">
+          <span class="text-xs font-semibold text-slate-500">Saldo Kas Bersih</span>
+          <p class="text-lg font-bold text-sky-700 mt-1">{{ formatRupiah(store.stats.balance || 0) }}</p>
+        </div>
         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <span class="text-xs font-semibold text-slate-500">Total Pemasukan</span>
           <p class="text-lg font-bold text-emerald-600 mt-1">{{ formatRupiah(store.stats.total_inflow || 0) }}</p>
@@ -112,7 +117,7 @@ async function handleDeleteAll() {
           <span class="text-xs font-semibold text-slate-500">Saldo Tabungan</span>
           <p class="text-lg font-bold text-slate-800 mt-1">{{ formatRupiah(store.stats.savings || 0) }}</p>
         </div>
-        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm col-span-2 md:col-span-1">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <span class="text-xs font-semibold text-slate-500">Saldo Pinjaman</span>
           <p class="text-lg font-bold text-slate-800 mt-1">{{ formatRupiah(store.stats.loans || 0) }}</p>
         </div>
@@ -167,7 +172,7 @@ async function handleDeleteAll() {
                 {{ formatRupiah(item.nominal) }}
               </td>
               <td class="p-4 text-right space-x-2 whitespace-nowrap">
-                <button @click="router.push('/cashflows/' + item.id)" class="text-sky-700 font-semibold text-xs hover:underline">
+                <button @click="router.push('/cash-flows/' + item.id)" class="text-sky-700 font-semibold text-xs hover:underline">
                   Detail
                 </button>
                 <button @click="openChange(item)" class="text-amber-700 font-semibold text-xs hover:underline">

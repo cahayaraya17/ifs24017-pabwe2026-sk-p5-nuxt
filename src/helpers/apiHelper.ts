@@ -25,6 +25,13 @@ export interface FetchOptions extends RequestInit {
   requiresAuth?: boolean
 }
 
+function parseValidationDetails(errorSource: any): string {
+  if (!errorSource || typeof errorSource !== 'object') return ''
+  return Object.entries(errorSource)
+    .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`)
+    .join(' | ')
+}
+
 export async function customFetch<T = any>(endpoint: string, options: FetchOptions = {}): Promise<T> {
   const { requiresAuth = true, headers: customHeaders = {}, ...restOptions } = options
   const baseUrl = getBaseUrl()
@@ -51,7 +58,11 @@ export async function customFetch<T = any>(endpoint: string, options: FetchOptio
   const data = await response.json().catch(() => ({}))
 
   if (!response.ok) {
-    const errorMsg = data?.message || 'Request failed with status ' + response.status
+    let errorMsg = (data && data.message) ? data.message : 'Request failed with status ' + response.status
+    const details = parseValidationDetails(data.data) || parseValidationDetails(data.errors)
+    if (details) {
+      errorMsg = `${errorMsg} (${details})`
+    }
     throw new Error(errorMsg)
   }
 

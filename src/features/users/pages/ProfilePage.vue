@@ -8,6 +8,7 @@ const usersStore = useUsersStore()
 
 const profileForm = reactive({
   name: '',
+  email: '',
   bio: '',
 })
 
@@ -17,29 +18,39 @@ const passwordForm = reactive({
   confirm_password: '',
 })
 
-onMounted(async () => {
+async function loadProfileData() {
   try {
     await usersStore.fetchProfile()
     if (usersStore.currentUser) {
       profileForm.name = usersStore.currentUser.name || ''
+      profileForm.email = usersStore.currentUser.email || ''
       profileForm.bio = usersStore.currentUser.bio || ''
     }
-  } catch {
-    // fallback
+  } catch (err: any) {
+    console.error('Gagal memuat profil', err)
   }
+}
+
+onMounted(() => {
+  loadProfileData()
 })
 
 async function handleSaveProfile() {
   if (!profileForm.name.trim()) {
     return showErrorDialog('Nama lengkap wajib diisi')
   }
+  if (!profileForm.email.trim()) {
+    return showErrorDialog('Email wajib diisi')
+  }
 
   try {
     const res = await usersStore.updateProfile({
       name: profileForm.name.trim(),
+      email: profileForm.email.trim(),
       bio: profileForm.bio.trim(),
     })
     await showSuccessDialog(res?.message || 'Profil berhasil diperbarui')
+    await loadProfileData()
   } catch (err: any) {
     await showErrorDialog(err?.message || 'Gagal memperbarui profil')
   }
@@ -63,6 +74,7 @@ async function handleSavePassword() {
     const res = await usersStore.updatePassword({
       current_password: passwordForm.current_password,
       password: passwordForm.password,
+      confirm_password: passwordForm.confirm_password,
     })
     await showSuccessDialog(res?.message || 'Kata sandi berhasil diperbarui')
     passwordForm.current_password = ''
@@ -93,6 +105,16 @@ async function handleSavePassword() {
               type="text"
               required
               placeholder="Nama Lengkap Anda"
+              class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-sky-600 focus:ring-1 focus:ring-sky-600 sm:text-sm"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700">Email</label>
+            <input
+              v-model="profileForm.email"
+              type="email"
+              required
+              placeholder="nama@email.com"
               class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-sky-600 focus:ring-1 focus:ring-sky-600 sm:text-sm"
             />
           </div>

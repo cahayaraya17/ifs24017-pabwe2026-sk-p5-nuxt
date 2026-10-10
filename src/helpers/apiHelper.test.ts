@@ -92,15 +92,52 @@ describe('apiHelper', () => {
     expect(res).toEqual({ status: 'ok' })
   })
 
-  it('melempar error saat response tidak ok dengan pesan dari API', async () => {
+  it('melempar error saat response tidak ok dengan data validation object', async () => {
     const mockFetch = vi.fn().mockResolvedValue({
       ok: false,
-      status: 400,
-      json: vi.fn().mockResolvedValue({ message: 'Validasi gagal' }),
+      status: 422,
+      json: vi.fn().mockResolvedValue({
+        message: 'Validasi gagal',
+        data: {
+          email: ['Email sudah dipakai', 'Email tidak valid'],
+          name: 'Nama wajib diisi',
+        },
+      }),
     })
     vi.stubGlobal('fetch', mockFetch)
 
-    await expect(customFetch('/error-test')).rejects.toThrow('Validasi gagal')
+    await expect(customFetch('/error-data')).rejects.toThrow(
+      'Validasi gagal (email: Email sudah dipakai, Email tidak valid | name: Nama wajib diisi)'
+    )
+  })
+
+  it('melempar error saat response tidak ok dengan errors validation object', async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 422,
+      json: vi.fn().mockResolvedValue({
+        message: 'Error skema',
+        errors: {
+          field: ['Wajib diisi'],
+        },
+      }),
+    })
+    vi.stubGlobal('fetch', mockFetch)
+
+    await expect(customFetch('/error-errors')).rejects.toThrow('Error skema (field: Wajib diisi)')
+  })
+
+  it('melempar error tanpa data atau errors object', async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 400,
+      json: vi.fn().mockResolvedValue({
+        message: 'Bad Request',
+      }),
+    })
+    vi.stubGlobal('fetch', mockFetch)
+
+    await expect(customFetch('/error-simple')).rejects.toThrow('Bad Request')
   })
 
   it('melempar error fallback saat response json gagal diurai', async () => {

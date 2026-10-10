@@ -7,6 +7,8 @@ import {
   uploadPhotoApi,
   updatePasswordApi,
   type UserItem,
+  type UpdateProfilePayload,
+  type UpdatePasswordPayload,
 } from '../api/userApi'
 
 export const useUsersStore = defineStore('users', () => {
@@ -18,7 +20,15 @@ export const useUsersStore = defineStore('users', () => {
     isLoading.value = true
     try {
       const res = await getUsersApi()
-      if (res?.data) users.value = res.data
+      if (res && res.data) {
+        if (Array.isArray(res.data)) {
+          users.value = res.data
+        } else if (Array.isArray((res.data as any).users)) {
+          users.value = (res.data as any).users
+        } else {
+          users.value = []
+        }
+      }
       return res
     } finally {
       isLoading.value = false
@@ -29,18 +39,29 @@ export const useUsersStore = defineStore('users', () => {
     isLoading.value = true
     try {
       const res = await getProfileApi()
-      if (res?.data) currentUser.value = res.data
+      if (res && res.data) {
+        currentUser.value = (res.data as any).user || res.data
+      }
       return res
     } finally {
       isLoading.value = false
     }
   }
 
-  async function updateProfile(payload: { name?: string; bio?: string }) {
+  async function updateProfile(payload: UpdateProfilePayload) {
     isLoading.value = true
     try {
       const res = await updateProfileApi(payload)
-      if (res?.data) currentUser.value = res.data
+      const resUser = res && res.data ? ((res.data as any).user || res.data) : null
+      if (resUser) {
+        currentUser.value = resUser
+      } else {
+        if (currentUser.value) {
+          currentUser.value.name = payload.name
+          currentUser.value.email = payload.email
+          currentUser.value.bio = payload.bio
+        }
+      }
       return res
     } finally {
       isLoading.value = false
@@ -51,8 +72,8 @@ export const useUsersStore = defineStore('users', () => {
     isLoading.value = true
     try {
       const res = await uploadPhotoApi(formData)
-      if (res?.data && currentUser.value) {
-        currentUser.value.photo = res.data.photo
+      if (res && res.data && currentUser.value) {
+        currentUser.value.photo = (res.data as any).photo || res.data
       }
       return res
     } finally {
@@ -60,7 +81,7 @@ export const useUsersStore = defineStore('users', () => {
     }
   }
 
-  async function updatePassword(payload: { old_password?: string; current_password?: string; password: string }) {
+  async function updatePassword(payload: UpdatePasswordPayload) {
     isLoading.value = true
     try {
       return await updatePasswordApi(payload)

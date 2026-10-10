@@ -34,15 +34,20 @@ describe('userApi', () => {
     expect(res.data?.name).toBe('Alice')
   })
 
-  it('memanggil updateProfileApi dengan payload JSON', async () => {
-    const fetchSpy = vi.spyOn(apiHelper, 'customFetch').mockResolvedValueOnce({
+  it('memanggil updateProfileApi dengan atau tanpa bio', async () => {
+    const fetchSpy = vi.spyOn(apiHelper, 'customFetch').mockResolvedValue({
       status: 'success',
     })
-    const payload = { name: 'Alice New', bio: 'Developer' }
-    await updateProfileApi(payload)
+    await updateProfileApi({ name: 'Alice', email: 'alice@delcom.org', bio: 'Bio' })
     expect(fetchSpy).toHaveBeenCalledWith('/users/me', {
       method: 'PUT',
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ name: 'Alice', email: 'alice@delcom.org', bio: 'Bio' }),
+    })
+
+    await updateProfileApi({ name: 'Bob', email: 'bob@delcom.org' })
+    expect(fetchSpy).toHaveBeenCalledWith('/users/me', {
+      method: 'PUT',
+      body: JSON.stringify({ name: 'Bob', email: 'bob@delcom.org' }),
     })
   })
 
@@ -73,15 +78,53 @@ describe('userApi', () => {
     )
   })
 
-  it('memanggil updatePasswordApi dengan benar', async () => {
-    const fetchSpy = vi.spyOn(apiHelper, 'customFetch').mockResolvedValueOnce({
+  it('memanggil updatePasswordApi menguji semua cabang percabangan payload', async () => {
+    const fetchSpy = vi.spyOn(apiHelper, 'customFetch').mockResolvedValue({
       status: 'success',
     })
-    const payload = { old_password: '123', password: '456' }
-    await updatePasswordApi(payload)
-    expect(fetchSpy).toHaveBeenCalledWith('/users/me/password', {
+
+    // Branch 1: current_password, password, confirm_password
+    await updatePasswordApi({
+      current_password: '123',
+      password: '456',
+      confirm_password: '456',
+    })
+    expect(fetchSpy).toHaveBeenCalledWith('/users/password', {
       method: 'PUT',
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        password: '123',
+        new_password: '456',
+        new_password_confirmation: '456',
+      }),
+    })
+
+    // Branch 2: old_password, new_password, new_password_confirmation
+    await updatePasswordApi({
+      old_password: 'old',
+      new_password: 'new',
+      new_password_confirmation: 'new_conf',
+      password: 'dummy',
+    })
+    expect(fetchSpy).toHaveBeenCalledWith('/users/password', {
+      method: 'PUT',
+      body: JSON.stringify({
+        password: 'old',
+        new_password: 'new',
+        new_password_confirmation: 'new_conf',
+      }),
+    })
+
+    // Branch 3: default empty current_password & fallback confirmation = newPwd
+    await updatePasswordApi({
+      password: 'only_pwd',
+    })
+    expect(fetchSpy).toHaveBeenCalledWith('/users/password', {
+      method: 'PUT',
+      body: JSON.stringify({
+        password: '',
+        new_password: 'only_pwd',
+        new_password_confirmation: 'only_pwd',
+      }),
     })
   })
 })
