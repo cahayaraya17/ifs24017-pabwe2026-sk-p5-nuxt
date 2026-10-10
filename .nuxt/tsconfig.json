@@ -59,16 +59,16 @@
         "../node_modules/nitropack/runtime"
       ],
       "~": [
-        "../src"
+        ".."
       ],
       "~/*": [
-        "../src/*"
+        "../*"
       ],
       "@": [
-        "../src"
+        ".."
       ],
       "@/*": [
-        "../src/*"
+        "../*"
       ],
       "~~": [
         ".."
@@ -89,22 +89,22 @@
         "../shared/*"
       ],
       "assets": [
-        "../src/assets"
+        "../assets"
       ],
       "assets/*": [
-        "../src/assets/*"
+        "../assets/*"
       ],
       "public": [
-        "../src/public"
+        "../public"
       ],
       "public/*": [
-        "../src/public/*"
+        "../public/*"
       ],
       "#server": [
-        "../src/server"
+        "../server"
       ],
       "#server/*": [
-        "../src/server/*"
+        "../server/*"
       ],
       "#app": [
         "../node_modules/nuxt/dist/app"
@@ -170,7 +170,6 @@
     "../**/*",
     "../.config/nuxt.*",
     "./nuxt.d.ts",
-    "../src/**/*",
     "../node_modules/runtime",
     "../node_modules/dist/runtime",
     ".."
@@ -178,11 +177,6 @@
   "exclude": [
     "../dist",
     "../.data",
-    "../node_modules",
-    "../node_modules/nuxt/node_modules",
-    "../node_modules/@pinia/nuxt/node_modules",
-    "../node_modules/@nuxt/devtools/node_modules",
-    "../node_modules/@nuxt/telemetry/node_modules",
     "../node_modules/runtime/server",
     "../node_modules/dist/runtime/server",
     "dev"
