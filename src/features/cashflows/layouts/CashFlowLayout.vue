@@ -14,12 +14,12 @@ onMounted(() => {
 <template>
   <div class="min-h-screen bg-slate-50 flex flex-col">
     <NavbarComponent />
-    <div class="flex flex-1">
-      <SidebarComponent />
-      <main class="flex-1 p-6 md:p-8 max-w-7xl mx-auto w-full">
-        <slot>
-          <router-view />
-        </slot>
+    <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+      <aside class="w-full md:w-64 flex-shrink-0">
+        <SidebarComponent />
+      </aside>
+      <main class="flex-1 min-w-0">
+        <slot />
       </main>
     </div>
   </div>
