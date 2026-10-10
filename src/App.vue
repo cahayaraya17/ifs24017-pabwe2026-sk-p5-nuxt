@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Root entry point SPA
+// Root template Nuxt
 </script>
 
 <template>
