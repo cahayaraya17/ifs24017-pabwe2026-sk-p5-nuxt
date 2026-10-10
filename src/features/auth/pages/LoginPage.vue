@@ -52,8 +52,8 @@ async function handleSubmit() {
     })
 
     if (res?.status === 'success') {
-      await showSuccessDialog(res.message || 'Login berhasil')
-      router.push('/')
+      showSuccessDialog(res.message || 'Login berhasil')
+      await router.push('/')
     } else {
       await showErrorDialog(res?.message || 'Login gagal')
     }
@@ -70,6 +70,7 @@ async function handleSubmit() {
         <label for="login-email-input" class="block text-sm font-semibold text-slate-700">Email</label>
         <input
           id="login-email-input"
+          name="email"
           v-model="form.email"
           type="email"
           autocomplete="email"
@@ -83,6 +84,7 @@ async function handleSubmit() {
         <label for="login-password-input" class="block text-sm font-semibold text-slate-700">Kata Sandi</label>
         <input
           id="login-password-input"
+          name="password"
           v-model="form.password"
           type="password"
           autocomplete="current-password"
