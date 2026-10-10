@@ -4,20 +4,20 @@
     "users/index.html": {
       "path": "users"
     },
+    "cash-flows/index.html": {
+      "path": "cash-flows"
+    },
     "profile/index.html": {
       "path": "profile"
     },
     "index.html": {
       "path": ""
     },
-    "cash-flows/index.html": {
-      "path": "cash-flows"
+    "auth/register/index.html": {
+      "path": "auth/register"
     },
     "auth/login/index.html": {
       "path": "auth/login"
-    },
-    "auth/register/index.html": {
-      "path": "auth/register"
     }
   },
   "routes": [
