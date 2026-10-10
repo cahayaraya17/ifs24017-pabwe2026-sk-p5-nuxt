@@ -107,7 +107,7 @@ async function handleSubmit() {
 
       <div class="text-center text-sm text-slate-600 pt-2">
         Belum punya akun?
-        <router-link to="/register" class="font-semibold text-sky-700 hover:text-sky-800">
+        <router-link to="/auth/register" class="font-semibold text-sky-700 hover:text-sky-800">
           Daftar akun baru
         </router-link>
       </div>
