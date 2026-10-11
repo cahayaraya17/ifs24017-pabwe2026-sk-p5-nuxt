@@ -12,33 +12,8 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  vite: {
-    build: {
-      cssCodeSplit: true,
-      minify: 'esbuild',
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              if (id.includes('sweetalert2')) {
-                return 'vendor-swal'
-              }
-              if (id.includes('pinia') || id.includes('vue-router')) {
-                return 'vendor-core'
-              }
-              return 'vendor'
-            }
-          },
-        },
-      },
-    },
-  },
-  features: {
-    inlineStyles: true,
-  },
   nitro: {
     preset: 'vercel-static',
-    compressPublicAssets: true,
     prerender: {
       crawlLinks: true,
       routes: [
