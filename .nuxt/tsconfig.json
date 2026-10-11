@@ -125,7 +125,7 @@
         "./imports"
       ],
       "#app-manifest": [
-        "./manifest/meta/ad512b55-7069-4da9-b5ed-a0fe831e8f38.json"
+        "./manifest/meta/dev.json"
       ],
       "#components": [
         "./components"
@@ -184,6 +184,6 @@
     "../node_modules/@nuxt/telemetry/node_modules",
     "../node_modules/runtime/server",
     "../node_modules/dist/runtime/server",
-    "../.vercel/output"
+    "dev"
   ]
 }
