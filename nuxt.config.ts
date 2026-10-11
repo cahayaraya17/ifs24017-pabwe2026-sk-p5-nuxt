@@ -14,7 +14,23 @@ export default defineNuxtConfig({
   },
   vite: {
     build: {
-      cssCodeSplit: false,
+      cssCodeSplit: true,
+      minify: 'esbuild',
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('sweetalert2')) {
+                return 'vendor-swal'
+              }
+              if (id.includes('pinia') || id.includes('vue-router')) {
+                return 'vendor-core'
+              }
+              return 'vendor'
+            }
+          },
+        },
+      },
     },
   },
   features: {
@@ -22,6 +38,7 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: 'vercel-static',
+    compressPublicAssets: true,
     prerender: {
       crawlLinks: true,
       routes: [
