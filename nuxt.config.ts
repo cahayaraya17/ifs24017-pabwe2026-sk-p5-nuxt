@@ -14,6 +14,7 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: 'vercel-static',
+    compressPublicAssets: true,
     prerender: {
       crawlLinks: true,
       routes: [
@@ -25,6 +26,9 @@ export default defineNuxtConfig({
         '/auth/register',
       ],
     },
+  },
+  hooks: {
+    'nitro:build:public-assets': () => {},
   },
   app: {
     head: {
