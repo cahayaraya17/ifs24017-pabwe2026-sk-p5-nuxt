@@ -2,7 +2,7 @@
 import { reactive, onMounted } from 'vue'
 import CashFlowLayout from '../../cashflows/layouts/CashFlowLayout.vue'
 import { useUsersStore } from '../states/usersStore'
-import { showSuccessDialog, showErrorDialog } from '../../../helpers/toolsHelper'
+import { showSuccessDialog, showErrorDialog } from '~/helpers/toolsHelper'
 
 const usersStore = useUsersStore()
 

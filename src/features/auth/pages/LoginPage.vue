@@ -3,7 +3,7 @@ import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import AuthLayout from '../layouts/AuthLayout.vue'
 import { useAuthStore } from '../states/authStore'
-import { showSuccessDialog, showErrorDialog } from '../../../helpers/toolsHelper'
+import { showSuccessDialog, showErrorDialog } from '~/helpers/toolsHelper'
 
 const router = useRouter()
 const authStore = useAuthStore()
