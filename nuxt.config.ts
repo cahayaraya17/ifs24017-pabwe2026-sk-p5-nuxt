@@ -12,8 +12,18 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  features: {
+    inlineStyles: true,
+  },
+  vite: {
+    build: {
+      cssCodeSplit: false,
+      minify: 'esbuild',
+    },
+  },
   nitro: {
     preset: 'vercel-static',
+    compressPublicAssets: true,
     prerender: {
       crawlLinks: true,
       routes: [
@@ -26,19 +36,6 @@ export default defineNuxtConfig({
       ],
     },
   },
-  hooks: {
-    'nitro:init': (nitro) => {
-      nitro.hooks.hook('prerender:generate', (route) => {
-        if (route.contents) {
-          // Mengubah stylesheet render-blocking menjadi non-blocking rel="preload" onload
-          route.contents = route.contents.replace(
-            /<link rel="stylesheet" href="([^"]+\.css)">/g,
-            '<link rel="preload" href="$1" as="style" onload="this.onload=null;this.rel=\'stylesheet\'"><noscript><link rel="stylesheet" href="$1"></noscript>'
-          )
-        }
-      })
-    },
-  },
   app: {
     head: {
       title: 'Delcom Cash Flow',
@@ -48,10 +45,6 @@ export default defineNuxtConfig({
       meta: [
         { name: 'description', content: 'Aplikasi manajemen arus kas Delcom Cash Flow' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      ],
-      link: [
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
       ],
     },
   },

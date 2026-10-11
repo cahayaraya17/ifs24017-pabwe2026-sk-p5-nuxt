@@ -1,7 +1,32 @@
 <!DOCTYPE html>
 <html lang="id" {{ HTML_ATTRS }}>
   <head {{ HEAD_ATTRS }}>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Delcom Cash Flow</title>
+    <link rel="canonical" href="https://ifs24017-pabwe2026-sk-p5-nuxt.vercel.app/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script>
+      // Ubah link stylesheet menjadi non-blocking saat DOM dimuat
+      (function() {
+        var observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            mutation.addedNodes.forEach(function(node) {
+              if (node.tagName === 'LINK' && node.rel === 'stylesheet' && node.href && node.href.includes('_nuxt')) {
+                node.rel = 'preload';
+                node.as = 'style';
+                node.onload = function() {
+                  this.onload = null;
+                  this.rel = 'stylesheet';
+                };
+              }
+            });
+          });
+        });
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+      })();
+    </script>
     {{ HEAD }}
   </head>
   <body {{ BODY_ATTRS }}>
