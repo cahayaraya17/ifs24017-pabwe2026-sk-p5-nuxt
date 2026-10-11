@@ -1,6 +1,6 @@
 <template>
-  <main role="main">
-    <h1 class="sr-only">Delcom Cash Flow Application</h1>
+  <div>
+    <h1 class="sr-only">Delcom Cash Flow</h1>
     <NuxtPage />
-  </main>
+  </div>
 </template>
