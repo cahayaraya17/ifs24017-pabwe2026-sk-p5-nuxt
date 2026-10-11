@@ -82,14 +82,17 @@ async function handleSubmit() {
 
 <template>
   <AuthLayout title="Daftar Akun Baru" subtitle="Mulai catat transaksi finansial Anda hari ini.">
-    <form class="space-y-4" @submit.prevent="handleSubmit">
+    <form class="space-y-4" @submit.prevent="handleSubmit" novalidate>
       <div>
         <label for="register-name-input" class="block text-sm font-semibold text-slate-700">Nama Lengkap</label>
         <input
           id="register-name-input"
           v-model="form.name"
           type="text"
+          name="name"
+          autocomplete="name"
           placeholder="Nama Anda"
+          aria-required="true"
           class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 shadow-sm focus:border-sky-600 focus:outline-none focus:ring-1 focus:ring-sky-600 sm:text-sm"
         />
         <p v-if="errors.name" class="mt-1 text-xs text-red-600">{{ errors.name }}</p>
@@ -101,8 +104,10 @@ async function handleSubmit() {
           id="register-email-input"
           v-model="form.email"
           type="email"
+          name="email"
           autocomplete="email"
           placeholder="nama@email.com"
+          aria-required="true"
           class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 shadow-sm focus:border-sky-600 focus:outline-none focus:ring-1 focus:ring-sky-600 sm:text-sm"
         />
         <p v-if="errors.email" class="mt-1 text-xs text-red-600">{{ errors.email }}</p>
@@ -114,8 +119,10 @@ async function handleSubmit() {
           id="register-password-input"
           v-model="form.password"
           type="password"
+          name="password"
           autocomplete="new-password"
           placeholder="••••••••"
+          aria-required="true"
           class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 shadow-sm focus:border-sky-600 focus:outline-none focus:ring-1 focus:ring-sky-600 sm:text-sm"
         />
         <p v-if="errors.password" class="mt-1 text-xs text-red-600">{{ errors.password }}</p>
@@ -127,8 +134,10 @@ async function handleSubmit() {
           id="register-confirm-password-input"
           v-model="form.confirmPassword"
           type="password"
+          name="confirmPassword"
           autocomplete="new-password"
           placeholder="••••••••"
+          aria-required="true"
           class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 shadow-sm focus:border-sky-600 focus:outline-none focus:ring-1 focus:ring-sky-600 sm:text-sm"
         />
         <p v-if="errors.confirmPassword" class="mt-1 text-xs text-red-600">{{ errors.confirmPassword }}</p>
