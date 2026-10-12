@@ -1,8 +1,9 @@
-import '@testing-library/jest-dom'
 import { vi } from 'vitest'
 
-// Mock default browser APIs jika diperlukan
-Object.defineProperty(window, 'scrollTo', {
-  value: vi.fn(),
-  writable: true,
-})
+// Mock sweetalert2 agar tidak melempar uncaught error di DOM headless
+vi.mock('sweetalert2', () => ({
+  default: {
+    fire: vi.fn().mockResolvedValue({ isConfirmed: true, isDismissed: false }),
+    close: vi.fn(),
+  },
+}))
