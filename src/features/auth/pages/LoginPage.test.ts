@@ -3,14 +3,14 @@ import { mount } from '@vue/test-utils'
 import LoginPage from './LoginPage.vue'
 import { createPinia, setActivePinia } from 'pinia'
 import { useAuthStore } from '../states/authStore'
-import * as toolsHelper from '../../../helpers/toolsHelper'
+import * as toolsHelper from '~/helpers/toolsHelper'
 
 const mockPush = vi.fn()
 vi.mock('vue-router', () => ({
   useRouter: () => ({ push: mockPush }),
 }))
 
-vi.mock('../../../helpers/toolsHelper', () => ({
+vi.mock('~/helpers/toolsHelper', () => ({
   showErrorDialog: vi.fn(),
   showSuccessDialog: vi.fn(),
 }))

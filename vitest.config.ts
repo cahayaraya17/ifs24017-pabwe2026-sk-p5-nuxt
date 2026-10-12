@@ -17,6 +17,7 @@ export default defineConfig({
         'src/**/*.test.ts',
         'src/**/*.d.ts',
         'src/app.vue',
+        'src/App.vue',
         'src/app.html',
         'src/setupTests.ts',
         'src/test-utils.ts',

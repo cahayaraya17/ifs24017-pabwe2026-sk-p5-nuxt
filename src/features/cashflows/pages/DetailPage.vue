@@ -10,7 +10,7 @@ const router = useRouter()
 const store = useCashFlowsStore()
 
 onMounted(() => {
-  const id = route.params.id as string
+  const id = route.params.cashFlowId as string
   if (id) store.fetchDetail(id)
 })
 

@@ -55,6 +55,17 @@ describe('toolsHelper', () => {
     expect(formatted).toContain('Rp')
   })
 
+  it('formatRupiah menangani nilai kosong, string angka, dan nilai tidak valid', () => {
+    expect(formatRupiah()).toBe('-')
+    expect(formatRupiah(undefined)).toBe('-')
+    expect(formatRupiah(null as any)).toBe('-')
+    expect(formatRupiah('')).toBe('-')
+    expect(formatRupiah('abc')).toBe('-')
+    expect(formatRupiah(NaN)).toBe('-')
+    expect(formatRupiah('1500')).toBe('Rp 1.500')
+    expect(formatRupiah(0)).toBe('Rp 0')
+  })
+
   it('formatDateTime memformat tanggal ISO ke format Indonesia', () => {
     expect(formatDateTime('')).toBe('-')
     expect(formatDateTime('invalid-date')).toBe('-')

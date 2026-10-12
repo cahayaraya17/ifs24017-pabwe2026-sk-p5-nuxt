@@ -30,4 +30,10 @@ describe('NavbarComponent.vue', () => {
     expect(logoutSpy).toHaveBeenCalled()
     expect(mockPush).toHaveBeenCalledWith('/login')
   })
+
+  it('menampilkan teks default saat profil pengguna belum tersedia', () => {
+    const wrapper = mount(NavbarComponent)
+    expect(wrapper.text()).toContain('Pengguna')
+    expect(wrapper.text()).toContain('Akun Aktif')
+  })
 })
